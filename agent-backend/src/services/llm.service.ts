@@ -1,11 +1,22 @@
 import OpenAI from 'openai';
 import { MCPService } from './mcp.service';
 
+// Validate Azure OpenAI configuration
+if (!process.env.AZURE_OPENAI_API_KEY) {
+  throw new Error('AZURE_OPENAI_API_KEY is required');
+}
+if (!process.env.AZURE_OPENAI_ENDPOINT) {
+  throw new Error('AZURE_OPENAI_ENDPOINT is required');
+}
+if (!process.env.AZURE_OPENAI_DEPLOYMENT_NAME) {
+  throw new Error('AZURE_OPENAI_DEPLOYMENT_NAME is required');
+}
+
 // Initialize Azure OpenAI client
 const openai = new OpenAI({
   apiKey: process.env.AZURE_OPENAI_API_KEY,
   baseURL: `${process.env.AZURE_OPENAI_ENDPOINT}/openai/deployments/${process.env.AZURE_OPENAI_DEPLOYMENT_NAME}`,
-  defaultQuery: { 'api-version': process.env.AZURE_OPENAI_API_VERSION || '2024-08-01-preview' },
+  defaultQuery: { 'api-version': process.env.AZURE_OPENAI_API_VERSION || '2025-04-01-preview' },
   defaultHeaders: { 'api-key': process.env.AZURE_OPENAI_API_KEY },
 });
 
