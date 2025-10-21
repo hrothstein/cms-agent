@@ -5,7 +5,7 @@ A conversational AI agent that provides bank employees with a natural language i
 ## 🎯 Overview
 
 This project demonstrates the power of conversational AI for banking operations using:
-- **Claude AI** for natural language understanding
+- **Azure OpenAI (GPT-4)** for natural language understanding
 - **MCP (Model Context Protocol)** for standardized tool integration
 - **React + TypeScript** for a modern chat interface
 - **Node.js + Express** for the backend API
@@ -24,7 +24,7 @@ This project demonstrates the power of conversational AI for banking operations 
 └───────────┬─────────────┘
             │
 ┌───────────▼─────────────┐
-│  Agent Backend          │  ← Node.js + Claude AI
+│  Agent Backend          │  ← Node.js + Azure OpenAI
 │  (Port 3001)            │
 └───────────┬─────────────┘
             │
@@ -72,7 +72,7 @@ This project demonstrates the power of conversational AI for banking operations 
 
 - Node.js 20 LTS or higher
 - npm or yarn
-- Anthropic API key (for Claude AI)
+- Azure OpenAI API key and endpoint
 - Access to MCP server
 
 ### Installation
@@ -94,7 +94,13 @@ cat > .env << EOF
 NODE_ENV=development
 PORT=3001
 MCP_BASE_URL=https://hbr-flextest-dl2x0l.8hm1bl.usa-e2.cloudhub.io/cms/
-ANTHROPIC_API_KEY=your-anthropic-api-key-here
+
+# Azure OpenAI Configuration
+AZURE_OPENAI_API_KEY=your-azure-openai-api-key
+AZURE_OPENAI_ENDPOINT=https://your-resource-name.openai.azure.com
+AZURE_OPENAI_DEPLOYMENT_NAME=gpt-4
+AZURE_OPENAI_API_VERSION=2024-08-01-preview
+
 CORS_ORIGIN=http://localhost:5173
 EOF
 ```
@@ -172,7 +178,7 @@ Agent: [remembers CUST123456] "John Doe has 2 cards..."
 - Node.js 20 LTS
 - Express.js
 - TypeScript
-- Anthropic Claude 3.5 Sonnet
+- Azure OpenAI (GPT-4 or GPT-4-turbo)
 - @modelcontextprotocol/sdk
 - Axios for HTTP
 
@@ -331,5 +337,5 @@ For questions about the CMS Admin Agent, refer to the PRD document or contact th
 
 ---
 
-**Built with ❤️ using Claude AI, MCP, and React**
+**Built with ❤️ using Azure OpenAI, MCP, and React**
 

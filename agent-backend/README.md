@@ -4,7 +4,7 @@ Backend API server for the CMS Admin Agent, providing conversational AI capabili
 
 ## Features
 
-- 🤖 Claude AI integration for natural language understanding
+- 🤖 Azure OpenAI (GPT-4) integration for natural language understanding
 - 🔌 MCP (Model Context Protocol) client for CMS operations
 - 💬 Conversational interface with context retention
 - 🛠️ 10 MCP tools for customer and card management
@@ -14,7 +14,7 @@ Backend API server for the CMS Admin Agent, providing conversational AI capabili
 
 - Node.js 20 LTS or higher
 - npm or yarn
-- Anthropic API key
+- Azure OpenAI API key and endpoint
 - Access to MCP server
 
 ## Installation
@@ -31,7 +31,13 @@ Create a `.env` file:
 NODE_ENV=development
 PORT=3001
 MCP_BASE_URL=https://hbr-flextest-dl2x0l.8hm1bl.usa-e2.cloudhub.io/cms/
-ANTHROPIC_API_KEY=your-api-key-here
+
+# Azure OpenAI Configuration
+AZURE_OPENAI_API_KEY=your-azure-openai-api-key
+AZURE_OPENAI_ENDPOINT=https://your-resource-name.openai.azure.com
+AZURE_OPENAI_DEPLOYMENT_NAME=gpt-4
+AZURE_OPENAI_API_VERSION=2024-08-01-preview
+
 CORS_ORIGIN=http://localhost:5173
 ```
 
@@ -75,7 +81,7 @@ npm run list-tools
 ├─────────────────┤
 │  Chat Routes    │
 ├─────────────────┤
-│  LLM Service    │  ← Claude AI
+│  LLM Service    │  ← Azure OpenAI (GPT-4)
 ├─────────────────┤
 │  MCP Service    │  ← Protocol Client
 ├─────────────────┤

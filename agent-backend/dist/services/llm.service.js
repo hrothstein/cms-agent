@@ -4,186 +4,220 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LLMService = void 0;
-const sdk_1 = __importDefault(require("@anthropic-ai/sdk"));
+const openai_1 = __importDefault(require("openai"));
 const mcp_service_1 = require("./mcp.service");
-const anthropic = new sdk_1.default({
-    apiKey: process.env.ANTHROPIC_API_KEY || '',
+// Initialize Azure OpenAI client
+const openai = new openai_1.default({
+    apiKey: process.env.AZURE_OPENAI_API_KEY,
+    baseURL: `${process.env.AZURE_OPENAI_ENDPOINT}/openai/deployments/${process.env.AZURE_OPENAI_DEPLOYMENT_NAME}`,
+    defaultQuery: { 'api-version': process.env.AZURE_OPENAI_API_VERSION || '2024-08-01-preview' },
+    defaultHeaders: { 'api-key': process.env.AZURE_OPENAI_API_KEY },
 });
 const mcp = new mcp_service_1.MCPService();
-// Define MCP tools for Claude function calling
+// Define MCP tools for OpenAI function calling
 const tools = [
     {
-        name: 'get_all_customers',
-        description: 'Retrieves all customers from the CMS API. Use this when the user asks to see, list, or show all customers.',
-        input_schema: {
-            type: 'object',
-            properties: {},
-            required: [],
-        },
-    },
-    {
-        name: 'get_customer_by_id',
-        description: 'Retrieves a specific customer by their ID. Use this when the user asks about a specific customer or provides a customer ID.',
-        input_schema: {
-            type: 'object',
-            properties: {
-                customerId: {
-                    type: 'string',
-                    description: 'The unique identifier of the customer (e.g., CUST123456)',
-                },
+        type: 'function',
+        function: {
+            name: 'get_all_customers',
+            description: 'Retrieves all customers from the CMS API. Use this when the user asks to see, list, or show all customers.',
+            parameters: {
+                type: 'object',
+                properties: {},
+                required: [],
             },
-            required: ['customerId'],
         },
     },
     {
-        name: 'create_customer',
-        description: 'Creates a new customer in the CMS. Use this when the user wants to add or create a new customer.',
-        input_schema: {
-            type: 'object',
-            properties: {
-                name: {
-                    type: 'string',
-                    description: 'The full name of the customer',
+        type: 'function',
+        function: {
+            name: 'get_customer_by_id',
+            description: 'Retrieves a specific customer by their ID. Use this when the user asks about a specific customer or provides a customer ID.',
+            parameters: {
+                type: 'object',
+                properties: {
+                    customerId: {
+                        type: 'string',
+                        description: 'The unique identifier of the customer (e.g., CUST123456)',
+                    },
                 },
-                email: {
-                    type: 'string',
-                    description: 'The email address of the customer',
-                },
-                phone: {
-                    type: 'string',
-                    description: 'The phone number of the customer',
-                },
+                required: ['customerId'],
             },
-            required: ['name', 'email', 'phone'],
         },
     },
     {
-        name: 'update_customer',
-        description: 'Updates an existing customer\'s information. Use this when the user wants to modify or change customer details.',
-        input_schema: {
-            type: 'object',
-            properties: {
-                customerId: {
-                    type: 'string',
-                    description: 'The unique identifier of the customer to update',
+        type: 'function',
+        function: {
+            name: 'create_customer',
+            description: 'Creates a new customer in the CMS. Use this when the user wants to add or create a new customer.',
+            parameters: {
+                type: 'object',
+                properties: {
+                    name: {
+                        type: 'string',
+                        description: 'The full name of the customer',
+                    },
+                    email: {
+                        type: 'string',
+                        description: 'The email address of the customer',
+                    },
+                    phone: {
+                        type: 'string',
+                        description: 'The phone number of the customer',
+                    },
                 },
-                name: {
-                    type: 'string',
-                    description: 'The updated name of the customer',
-                },
-                email: {
-                    type: 'string',
-                    description: 'The updated email address',
-                },
-                phone: {
-                    type: 'string',
-                    description: 'The updated phone number',
-                },
+                required: ['name', 'email', 'phone'],
             },
-            required: ['customerId', 'name', 'email', 'phone'],
         },
     },
     {
-        name: 'delete_customer',
-        description: 'Deletes a customer from the CMS. Use this when the user wants to remove or delete a customer. Always confirm with the user before deleting.',
-        input_schema: {
-            type: 'object',
-            properties: {
-                customerId: {
-                    type: 'string',
-                    description: 'The unique identifier of the customer to delete',
+        type: 'function',
+        function: {
+            name: 'update_customer',
+            description: 'Updates an existing customer\'s information. Use this when the user wants to modify or change customer details.',
+            parameters: {
+                type: 'object',
+                properties: {
+                    customerId: {
+                        type: 'string',
+                        description: 'The unique identifier of the customer to update',
+                    },
+                    name: {
+                        type: 'string',
+                        description: 'The updated name of the customer',
+                    },
+                    email: {
+                        type: 'string',
+                        description: 'The updated email address',
+                    },
+                    phone: {
+                        type: 'string',
+                        description: 'The updated phone number',
+                    },
                 },
+                required: ['customerId', 'name', 'email', 'phone'],
             },
-            required: ['customerId'],
         },
     },
     {
-        name: 'get_all_cards',
-        description: 'Retrieves all cards from the CMS API. Use this when the user asks to see, list, or show all cards.',
-        input_schema: {
-            type: 'object',
-            properties: {},
-            required: [],
-        },
-    },
-    {
-        name: 'get_card_by_id',
-        description: 'Retrieves a specific card by its ID. Use this when the user asks about a specific card or provides a card ID.',
-        input_schema: {
-            type: 'object',
-            properties: {
-                cardId: {
-                    type: 'string',
-                    description: 'The unique identifier of the card',
+        type: 'function',
+        function: {
+            name: 'delete_customer',
+            description: 'Deletes a customer from the CMS. Use this when the user wants to remove or delete a customer. Always confirm with the user before deleting.',
+            parameters: {
+                type: 'object',
+                properties: {
+                    customerId: {
+                        type: 'string',
+                        description: 'The unique identifier of the customer to delete',
+                    },
                 },
+                required: ['customerId'],
             },
-            required: ['cardId'],
         },
     },
     {
-        name: 'create_card',
-        description: 'Creates a new card for a customer in the CMS. Use this when the user wants to add or create a new card.',
-        input_schema: {
-            type: 'object',
-            properties: {
-                customerId: {
-                    type: 'string',
-                    description: 'The ID of the customer who will own this card',
-                },
-                cardNumber: {
-                    type: 'string',
-                    description: 'The card number (16 digits)',
-                },
-                cardType: {
-                    type: 'string',
-                    description: 'The type of card (e.g., debit, credit)',
-                },
-                expiryDate: {
-                    type: 'string',
-                    description: 'The expiry date of the card (format: MM/YYYY)',
-                },
+        type: 'function',
+        function: {
+            name: 'get_all_cards',
+            description: 'Retrieves all cards from the CMS API. Use this when the user asks to see, list, or show all cards.',
+            parameters: {
+                type: 'object',
+                properties: {},
+                required: [],
             },
-            required: ['customerId', 'cardNumber', 'cardType', 'expiryDate'],
         },
     },
     {
-        name: 'update_card',
-        description: 'Updates an existing card\'s information. Use this when the user wants to modify or change card details.',
-        input_schema: {
-            type: 'object',
-            properties: {
-                cardId: {
-                    type: 'string',
-                    description: 'The unique identifier of the card to update',
+        type: 'function',
+        function: {
+            name: 'get_card_by_id',
+            description: 'Retrieves a specific card by its ID. Use this when the user asks about a specific card or provides a card ID.',
+            parameters: {
+                type: 'object',
+                properties: {
+                    cardId: {
+                        type: 'string',
+                        description: 'The unique identifier of the card',
+                    },
                 },
-                cardNumber: {
-                    type: 'string',
-                    description: 'The updated card number',
-                },
-                cardType: {
-                    type: 'string',
-                    description: 'The updated card type',
-                },
-                expiryDate: {
-                    type: 'string',
-                    description: 'The updated expiry date',
-                },
+                required: ['cardId'],
             },
-            required: ['cardId', 'cardNumber', 'cardType', 'expiryDate'],
         },
     },
     {
-        name: 'delete_card',
-        description: 'Deletes a card from the CMS. Use this when the user wants to remove or delete a card. Always confirm with the user before deleting.',
-        input_schema: {
-            type: 'object',
-            properties: {
-                cardId: {
-                    type: 'string',
-                    description: 'The unique identifier of the card to delete',
+        type: 'function',
+        function: {
+            name: 'create_card',
+            description: 'Creates a new card for a customer in the CMS. Use this when the user wants to add or create a new card.',
+            parameters: {
+                type: 'object',
+                properties: {
+                    customerId: {
+                        type: 'string',
+                        description: 'The ID of the customer who will own this card',
+                    },
+                    cardNumber: {
+                        type: 'string',
+                        description: 'The card number (16 digits)',
+                    },
+                    cardType: {
+                        type: 'string',
+                        description: 'The type of card (e.g., debit, credit)',
+                    },
+                    expiryDate: {
+                        type: 'string',
+                        description: 'The expiry date of the card (format: MM/YYYY)',
+                    },
                 },
+                required: ['customerId', 'cardNumber', 'cardType', 'expiryDate'],
             },
-            required: ['cardId'],
+        },
+    },
+    {
+        type: 'function',
+        function: {
+            name: 'update_card',
+            description: 'Updates an existing card\'s information. Use this when the user wants to modify or change card details.',
+            parameters: {
+                type: 'object',
+                properties: {
+                    cardId: {
+                        type: 'string',
+                        description: 'The unique identifier of the card to update',
+                    },
+                    cardNumber: {
+                        type: 'string',
+                        description: 'The updated card number',
+                    },
+                    cardType: {
+                        type: 'string',
+                        description: 'The updated card type',
+                    },
+                    expiryDate: {
+                        type: 'string',
+                        description: 'The updated expiry date',
+                    },
+                },
+                required: ['cardId', 'cardNumber', 'cardType', 'expiryDate'],
+            },
+        },
+    },
+    {
+        type: 'function',
+        function: {
+            name: 'delete_card',
+            description: 'Deletes a card from the CMS. Use this when the user wants to remove or delete a card. Always confirm with the user before deleting.',
+            parameters: {
+                type: 'object',
+                properties: {
+                    cardId: {
+                        type: 'string',
+                        description: 'The unique identifier of the card to delete',
+                    },
+                },
+                required: ['cardId'],
+            },
         },
     },
 ];
@@ -225,8 +259,11 @@ class LLMService {
     async processMessage(userMessage, conversationHistory = []) {
         await this.initialize();
         const toolsUsed = [];
-        let continueLoop = true;
-        let currentMessages = [
+        let messages = [
+            {
+                role: 'system',
+                content: SYSTEM_PROMPT,
+            },
             ...conversationHistory.map((msg) => ({
                 role: msg.role,
                 content: msg.content,
@@ -236,49 +273,52 @@ class LLMService {
                 content: userMessage,
             },
         ];
-        while (continueLoop) {
+        let continueLoop = true;
+        let iterationCount = 0;
+        const maxIterations = 5; // Prevent infinite loops
+        while (continueLoop && iterationCount < maxIterations) {
+            iterationCount++;
             try {
-                const response = await anthropic.messages.create({
-                    model: 'claude-3-5-sonnet-20241022',
-                    max_tokens: 4096,
-                    system: SYSTEM_PROMPT,
+                const response = await openai.chat.completions.create({
+                    model: process.env.AZURE_OPENAI_DEPLOYMENT_NAME || 'gpt-4',
+                    messages: messages,
                     tools: tools,
-                    messages: currentMessages,
+                    tool_choice: 'auto',
+                    temperature: 0.7,
+                    max_tokens: 2000,
                 });
-                // Check if Claude wants to use tools
-                const toolUseBlock = response.content.find((block) => block.type === 'tool_use');
-                if (toolUseBlock) {
-                    // Execute the tool
-                    const toolResult = await this.executeToolCall(toolUseBlock.name, toolUseBlock.input);
-                    toolsUsed.push({
-                        toolName: toolUseBlock.name,
-                        toolInput: toolUseBlock.input,
-                        toolResult: toolResult.data,
-                        success: toolResult.success,
-                        error: toolResult.error,
-                    });
-                    // Add assistant's response and tool result to conversation
-                    currentMessages.push({
-                        role: 'assistant',
-                        content: response.content,
-                    });
-                    currentMessages.push({
-                        role: 'user',
-                        content: [
-                            {
-                                type: 'tool_result',
-                                tool_use_id: toolUseBlock.id,
-                                content: JSON.stringify(toolResult.data),
-                            },
-                        ],
-                    });
+                const responseMessage = response.choices[0].message;
+                messages.push(responseMessage);
+                // Check if the model wants to call functions
+                if (responseMessage.tool_calls && responseMessage.tool_calls.length > 0) {
+                    // Execute all tool calls
+                    for (const toolCall of responseMessage.tool_calls) {
+                        if (toolCall.type !== 'function')
+                            continue;
+                        const functionName = toolCall.function.name;
+                        const functionArgs = JSON.parse(toolCall.function.arguments);
+                        const toolResult = await this.executeToolCall(functionName, functionArgs);
+                        toolsUsed.push({
+                            toolName: functionName,
+                            toolInput: functionArgs,
+                            toolResult: toolResult.data,
+                            success: toolResult.success,
+                            error: toolResult.error,
+                        });
+                        // Add function response to messages
+                        messages.push({
+                            role: 'tool',
+                            content: JSON.stringify(toolResult.data),
+                            tool_call_id: toolCall.id,
+                        });
+                    }
                     // Continue loop to get final response
                 }
                 else {
-                    // No more tools to use, extract final text response
-                    const textBlock = response.content.find((block) => block.type === 'text');
+                    // No more function calls, return the response
+                    continueLoop = false;
                     return {
-                        response: textBlock?.text || 'No response generated.',
+                        response: responseMessage.content || 'No response generated.',
                         toolsUsed,
                     };
                 }
@@ -291,8 +331,9 @@ class LLMService {
                 };
             }
         }
+        // If we hit max iterations
         return {
-            response: 'An unexpected error occurred.',
+            response: 'I processed your request but encountered complexity limits. Please try breaking your request into smaller parts.',
             toolsUsed,
         };
     }
