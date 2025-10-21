@@ -317,8 +317,7 @@ export class LLMService {
           messages: messages,
           tools: tools,
           tool_choice: 'auto',
-          temperature: 0.7,
-          max_tokens: 2000,
+          max_completion_tokens: 2000,
         });
 
         const responseMessage = response.choices[0].message;
