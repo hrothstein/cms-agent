@@ -22,7 +22,7 @@ const ChatInterface: React.FC = () => {
     setMessages([
       {
         role: 'assistant',
-        content: "Hello! 👋 I'm your CMS Admin Assistant. I can help you manage customers and cards through natural language.\n\nTry asking me things like:\n- 'Show me all customers'\n- 'List all cards'\n- 'Get customer details for a specific ID'\n- 'Create a new customer'\n- Type 'help' for more information\n\nWhat would you like to do?",
+        content: "Hello! 👋 I'm your CMS Admin Assistant. I can help you manage customers and cards through natural language.\n\nTry asking me things like:\n• 'Show me all customers'\n• 'List all cards'\n• 'Get customer details for a specific ID'\n• 'Create a new customer'\n• Type 'help' for more information\n\nWhat would you like to do?",
         timestamp: new Date().toISOString(),
       },
     ]);
@@ -48,8 +48,6 @@ const ChatInterface: React.FC = () => {
 
     try {
       const response = await api.sendMessage(sessionId, message);
-
-      // Add agent response
       const agentMessage: Message = {
         role: 'assistant',
         content: response.data.agentResponse,
@@ -88,62 +86,34 @@ const ChatInterface: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="chat-container">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 text-white shadow-xl">
-        <div className="max-w-5xl mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm shadow-lg">
-              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-              </svg>
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight">CMS Admin Agent</h1>
-              <p className="text-xs text-blue-100 mt-0.5">Powered by Azure OpenAI • gpt-5-mini</p>
-            </div>
+      <div className="chat-header">
+        <div className="header-title">
+          <div style={{ fontSize: '32px' }}>💬</div>
+          <div>
+            <h1>CMS Admin Agent</h1>
+            <p>Conversational AI for Customer & Card Management</p>
           </div>
-          <button
-            onClick={clearConversation}
-            className="px-5 py-2.5 bg-white/10 hover:bg-white/20 rounded-xl transition-all duration-200 text-sm font-semibold backdrop-blur-sm border border-white/20 hover:scale-105 hover:shadow-lg flex items-center space-x-2"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-            </svg>
-            <span>Clear Chat</span>
-          </button>
         </div>
+        <button onClick={clearConversation} className="clear-button">
+          🗑️ Clear Chat
+        </button>
       </div>
 
       {/* Error Banner */}
       {error && (
-        <div className="bg-red-50 border-l-4 border-red-500 p-4 animate-fadeIn">
-          <div className="flex max-w-5xl mx-auto">
-            <div className="flex-shrink-0">
-              <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-              </svg>
-            </div>
-            <div className="ml-3">
-              <p className="text-sm text-red-700 font-medium">{error}</p>
-            </div>
-            <div className="ml-auto pl-3">
-              <button
-                onClick={() => setError(null)}
-                className="text-red-400 hover:text-red-600 transition-colors"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-          </div>
+        <div className="error-banner">
+          <span>{error}</span>
+          <button onClick={() => setError(null)} className="error-close">
+            ✕
+          </button>
         </div>
       )}
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-4 py-6">
-        <div className="max-w-4xl mx-auto space-y-4">
+      <div className="messages-container">
+        <div className="messages-wrapper">
           {messages.map((msg, idx) => (
             <MessageBubble key={idx} message={msg} />
           ))}
@@ -153,8 +123,8 @@ const ChatInterface: React.FC = () => {
       </div>
 
       {/* Input */}
-      <div className="border-t border-gray-200 bg-white/80 backdrop-blur-lg shadow-2xl">
-        <div className="max-w-4xl mx-auto">
+      <div className="input-container">
+        <div className="input-wrapper">
           <ChatInput onSend={sendMessage} disabled={isTyping} />
         </div>
       </div>
