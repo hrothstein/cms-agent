@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://cms-agent-backend-c2e41095b884.herokuapp.com/api/v1';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://cms-agent-backend-space-f033db8d699b.herokuapp.com/api/v1';
 
 export interface Message {
   role: 'user' | 'assistant';
