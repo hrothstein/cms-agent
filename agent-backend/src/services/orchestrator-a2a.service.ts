@@ -3,8 +3,7 @@
  * Exposes orchestrator capabilities via A2A Protocol
  */
 
-import { A2AServer } from '../a2a-sdk/server/A2AServer';
-import { SkillHandler } from '../a2a-sdk/types/AgentCard';
+import { A2AServer, SkillHandler } from '../a2a-sdk/server/A2AServer';
 import { orchestratorAgentCard } from '../config/agent-card';
 import { MCPService } from './mcp.service';
 import { LLMService } from './llm.service';
