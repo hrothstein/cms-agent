@@ -15,7 +15,6 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "@cms/a2a-sdk": "file:../a2a-sdk",
     "@modelcontextprotocol/sdk": "^1.20.1",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",

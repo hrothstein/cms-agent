@@ -119,7 +119,7 @@ app.listen(PORT, async () => {
 ✅ A2A Protocol Server started on port ${A2A_PORT}
    Agent ID: ${orchestratorAgentCard.id}
    Agent Card: http://localhost:${A2A_PORT}/.well-known/agent.json
-   Skills: ${orchestratorAgentCard.skills.map(s => s.name).join(', ')}
+   Skills: ${orchestratorAgentCard.skills.map((s: any) => s.name).join(', ')}
    
    Other agents can now discover and delegate tasks to this orchestrator!
       `);

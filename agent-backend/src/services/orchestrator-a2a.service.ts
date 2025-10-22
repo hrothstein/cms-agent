@@ -3,7 +3,8 @@
  * Exposes orchestrator capabilities via A2A Protocol
  */
 
-import { A2AServer, SkillHandler } from '@cms/a2a-sdk';
+import { A2AServer } from '../a2a-sdk/server/A2AServer';
+import { SkillHandler } from '../a2a-sdk/types/AgentCard';
 import { orchestratorAgentCard } from '../config/agent-card';
 import { MCPService } from './mcp.service';
 import { LLMService } from './llm.service';
@@ -18,7 +19,7 @@ function createSkillHandlers(): Map<string, SkillHandler> {
   const handlers = new Map<string, SkillHandler>();
 
   // Skill: manage_customer
-  handlers.set('manage_customer', async (params) => {
+  handlers.set('manage_customer', async (params: any) => {
     const { operation, customerId, name, email, phone } = params;
 
     try {
@@ -62,7 +63,7 @@ function createSkillHandlers(): Map<string, SkillHandler> {
   });
 
   // Skill: manage_card
-  handlers.set('manage_card', async (params) => {
+  handlers.set('manage_card', async (params: any) => {
     const { operation, cardId, customerId, cardNumber, cardType, expiryDate } = params;
 
     try {
@@ -108,7 +109,7 @@ function createSkillHandlers(): Map<string, SkillHandler> {
   });
 
   // Skill: coordinate_agents
-  handlers.set('coordinate_agents', async (params) => {
+  handlers.set('coordinate_agents', async (params: any) => {
     const { workflow, parameters } = params;
 
     // Placeholder for multi-agent coordination
@@ -121,7 +122,7 @@ function createSkillHandlers(): Map<string, SkillHandler> {
   });
 
   // Skill: process_natural_language
-  handlers.set('process_natural_language', async (params) => {
+  handlers.set('process_natural_language', async (params: any) => {
     const { message, sessionId } = params;
 
     try {

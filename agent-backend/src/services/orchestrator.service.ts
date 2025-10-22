@@ -3,7 +3,9 @@
  * Coordinates multiple specialist agents using A2A Protocol
  */
 
-import { A2AClient, AgentCard, Task } from '@cms/a2a-sdk';
+import { A2AClient } from '../a2a-sdk/client/A2AClient';
+import { AgentCard } from '../a2a-sdk/types/AgentCard';
+import { Task } from '../a2a-sdk/types/Task';
 import axios from 'axios';
 
 const REGISTRY_URL = process.env.AGENT_REGISTRY_URL || 'http://localhost:3001';
@@ -86,7 +88,7 @@ export class OrchestratorService {
     const matching: AgentDelegate[] = [];
 
     for (const agent of this.agents.values()) {
-      const hasSkill = agent.card.skills.some((skill) => skill.name === skillName);
+      const hasSkill = agent.card.skills.some((skill: any) => skill.name === skillName);
       if (hasSkill) {
         matching.push(agent);
       }

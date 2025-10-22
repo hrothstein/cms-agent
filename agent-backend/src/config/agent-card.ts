@@ -3,7 +3,7 @@
  * Published at /.well-known/agent.json for A2A discovery
  */
 
-import { AgentCard } from '@cms/a2a-sdk';
+import { AgentCard } from '../a2a-sdk/types/AgentCard';
 
 const ORCHESTRATOR_ENDPOINT = process.env.ORCHESTRATOR_ENDPOINT || 'http://localhost:3000';
 
