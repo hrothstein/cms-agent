@@ -6,11 +6,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.LLMService = void 0;
 const openai_1 = __importDefault(require("openai"));
 const mcp_service_1 = require("./mcp.service");
+// Validate Azure OpenAI configuration
+if (!process.env.AZURE_OPENAI_API_KEY) {
+    throw new Error('AZURE_OPENAI_API_KEY is required');
+}
+if (!process.env.AZURE_OPENAI_ENDPOINT) {
+    throw new Error('AZURE_OPENAI_ENDPOINT is required');
+}
+if (!process.env.AZURE_OPENAI_DEPLOYMENT_NAME) {
+    throw new Error('AZURE_OPENAI_DEPLOYMENT_NAME is required');
+}
 // Initialize Azure OpenAI client
 const openai = new openai_1.default({
     apiKey: process.env.AZURE_OPENAI_API_KEY,
     baseURL: `${process.env.AZURE_OPENAI_ENDPOINT}/openai/deployments/${process.env.AZURE_OPENAI_DEPLOYMENT_NAME}`,
-    defaultQuery: { 'api-version': process.env.AZURE_OPENAI_API_VERSION || '2024-08-01-preview' },
+    defaultQuery: { 'api-version': process.env.AZURE_OPENAI_API_VERSION || '2025-04-01-preview' },
     defaultHeaders: { 'api-key': process.env.AZURE_OPENAI_API_KEY },
 });
 const mcp = new mcp_service_1.MCPService();
@@ -284,8 +294,7 @@ class LLMService {
                     messages: messages,
                     tools: tools,
                     tool_choice: 'auto',
-                    temperature: 0.7,
-                    max_tokens: 2000,
+                    max_completion_tokens: 2000,
                 });
                 const responseMessage = response.choices[0].message;
                 messages.push(responseMessage);
