@@ -1,0 +1,30 @@
+{
+  "name": "@cms/agent-registry",
+  "version": "1.0.0",
+  "description": "Central Agent Registry for A2A multi-agent system",
+  "main": "dist/app.js",
+  "scripts": {
+    "dev": "nodemon --exec ts-node src/app.ts",
+    "build": "tsc",
+    "start": "node dist/app.js"
+  },
+  "keywords": ["agent", "registry", "a2a", "discovery"],
+  "author": "CMS Team",
+  "license": "MIT",
+  "dependencies": {
+    "@cms/a2a-sdk": "file:../a2a-sdk",
+    "axios": "^1.12.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.17.12",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  }
+}
+
