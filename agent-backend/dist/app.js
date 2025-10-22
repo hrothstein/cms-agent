@@ -44,7 +44,7 @@ app.get('/health', (req, res) => {
 // Root route
 app.get('/', (req, res) => {
     res.json({
-        name: 'CMS Orchestrator Agent',
+        name: 'CMS Agent',
         version: '2.0.0',
         status: 'running',
         a2a_enabled: process.env.A2A_ENABLED === 'true',
@@ -78,7 +78,7 @@ app.listen(PORT, async () => {
     console.log(`
 ╔═══════════════════════════════════════════════════════╗
 ║                                                       ║
-║   🤖 CMS ORCHESTRATOR AGENT V2.0                     ║
+║   🤖 CMS AGENT V2.0                                  ║
 ║                                                       ║
 ║   HTTP API Port: ${PORT}                              ║
 ║   A2A Port: ${A2A_ENABLED ? A2A_PORT : 'Disabled'}                                   ║
@@ -97,7 +97,7 @@ app.listen(PORT, async () => {
 ║   - Natural Language Chat                            ║
 ║   - Customer Management (via MCP)                   ║
 ║   - Card Management (via MCP)                       ║
-║   - Multi-Agent Coordination (A2A)                  ║
+║   - A2A Protocol Support                            ║
 ║                                                       ║
 ╚═══════════════════════════════════════════════════════╝
   `);

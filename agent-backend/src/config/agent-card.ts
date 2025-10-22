@@ -8,18 +8,15 @@ import { AgentCard } from '@cms/a2a-sdk';
 const ORCHESTRATOR_ENDPOINT = process.env.ORCHESTRATOR_ENDPOINT || 'http://localhost:3000';
 
 export const orchestratorAgentCard: AgentCard = {
-  id: 'cms-orchestrator-agent',
-  name: 'CMS Orchestrator Agent',
-  description: 'Main coordinator for Card Management System operations. Manages customers, cards, and coordinates specialist agents for complex banking workflows.',
+  id: 'cms-agent',
+  name: 'CMS Agent',
+  description: 'Card Management System agent for managing customers and cards. Provides natural language interface and A2A protocol support.',
   version: '2.0.0',
   capabilities: [
-    'task_delegation',
-    'agent_discovery',
-    'context_management',
-    'response_aggregation',
     'customer_management',
     'card_management',
-    'multi_agent_coordination'
+    'natural_language_processing',
+    'a2a_protocol'
   ],
   skills: [
     {
