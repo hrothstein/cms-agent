@@ -9,11 +9,12 @@ import chatRoutes from './routes/chat.routes';
 const app = express();
 
 // Middleware
+const allowedOrigins = process.env.CORS_ORIGIN 
+  ? process.env.CORS_ORIGIN.split(',').map(o => o.trim())
+  : ['http://localhost:5173', 'http://localhost:5174'];
+
 app.use(cors({
-  origin: [
-    process.env.CORS_ORIGIN || 'http://localhost:5173',
-    'http://localhost:5174'
-  ],
+  origin: allowedOrigins,
   credentials: true,
 }));
 app.use(express.json());
