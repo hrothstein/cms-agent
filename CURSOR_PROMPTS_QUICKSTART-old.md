@@ -67,75 +67,20 @@ Do NOT proceed until all 10 MCP tools are verified working.
 
 ---
 
-## 🌐 Project 3: V2 A2A Protocol (Multi-Agent System)
-
-**PRD Document:** `CMS_V2_A2A_Protocol_PRD.md`
-
-**Prompt for Cursor:**
-
-```
-Build A2A (Agent-to-Agent) Protocol support for the CMS ecosystem following 
-the specifications in CMS_V2_A2A_Protocol_PRD.md.
-
-CRITICAL REQUIREMENTS:
-1. Create feature/v2-a2a branch (DO NOT touch master)
-2. Implement Google's A2A Protocol (JSON-RPC 2.0 over HTTP)
-3. Build A2A Client SDK and Server SDK
-4. Convert existing Admin Agent to Orchestrator
-5. Build 4 specialist agents (Fraud, Card Control, Customer Service, Compliance)
-6. Each agent must publish Agent Card at /.well-known/agent.json
-7. Implement task management and agent discovery
-8. NO new Heroku Dynos - ask for existing app names
-9. NO partial releases - only deploy when complete
-
-BUILD ORDER:
-Phase 1: A2A Infrastructure (Client SDK, Server SDK, Agent Registry, Task Manager)
-Phase 2: Convert Admin Agent to Orchestrator
-Phase 3: Build 4 Specialist Agents (each with Agent Card + A2A Server)
-Phase 4: Multi-Agent Workflows (parallel execution, agent communication)
-Phase 5: UI Visualization + Demo Polish
-
-Key Technologies:
-- JSON-RPC 2.0 over HTTP(S)
-- Agent Cards at /.well-known/agent.json
-- Task lifecycle management
-- Bull queue (Redis) for async tasks
-- Express.js for A2A servers
-
-Start by creating the feature/v2-a2a branch and building the A2A SDK foundation.
-Do NOT proceed to specialist agents until SDK and orchestrator are working.
-```
-
----
-
 ## 📊 Build Order Summary
-
-### Recommended Sequence:
-
-**Option A: Build Sequentially (Recommended)**
-1. **CMS First** → Complete standalone Card Management System
-2. **Admin Agent Second** → Single agent with MCP integration
-3. **V2 A2A Third** → Multi-agent system with A2A protocol
-
-**Option B: Build Independently**
-- Each project is independent and can be built in any order
-- CMS can run standalone
-- Admin Agent requires CMS APIs (via MCP)
-- V2 requires Admin Agent to upgrade to Orchestrator
 
 ### If building CMS first:
 1. Give Cursor the **CMS prompt** above
 2. Wait for complete, working CMS
 3. Then give Cursor the **Admin Agent prompt**
-4. Finally give Cursor the **V2 A2A prompt**
 
 ### If building Admin Agent first:
 1. Ensure CMS APIs exist (via MCP)
 2. Give Cursor the **Admin Agent prompt**
 3. Agent will connect to existing CMS via MCP
 
-### If building V2 first:
-**Not recommended** - V2 upgrades the Admin Agent, so build Admin Agent first.
+### If building both simultaneously:
+**Not recommended** - build one at a time to avoid confusion and ensure quality.
 
 ---
 
@@ -167,7 +112,6 @@ Do NOT proceed to specialist agents until SDK and orchestrator are working.
 /mnt/user-data/outputs/
 ├── CMS_PRD_Complete.md              ← Full CMS specification
 ├── CMS_Admin_Agent_PRD.md           ← Full Agent specification  
-├── CMS_V2_A2A_Protocol_PRD.md       ← V2 Multi-Agent A2A specification
 └── CURSOR_PROMPTS_QUICKSTART.md     ← This file (quick reference)
 ```
 
@@ -196,20 +140,6 @@ Do NOT proceed to specialist agents until SDK and orchestrator are working.
 - ✅ No console errors
 - ✅ All demo scenarios work
 
-### V2 A2A is Complete When:
-- ✅ A2A Protocol implemented (JSON-RPC 2.0)
-- ✅ All agents publish Agent Cards
-- ✅ Orchestrator discovers agents
-- ✅ Orchestrator delegates tasks
-- ✅ 4 specialist agents work (Fraud, Card Control, Customer Service, Compliance)
-- ✅ Multi-agent workflows execute (parallel & sequential)
-- ✅ Agent-to-agent communication works
-- ✅ Task lifecycle management works
-- ✅ MCP + A2A work together
-- ✅ All 4 demo scenarios work
-- ✅ Agent visualization UI works
-- ✅ No console errors
-
 ---
 
 ## 💡 Tips for Success
@@ -221,67 +151,6 @@ Do NOT proceed to specialist agents until SDK and orchestrator are working.
 5. **One Feature at a Time** - Don't try to build everything at once
 6. **Check Constraints** - Remember: No new Dynos, no partial releases
 7. **Ask Questions** - If unclear, ask before building
-
-### V2 Specific Tips:
-8. **Build A2A SDK First** - Foundation before agents
-9. **Test Agent Discovery** - Verify Agent Cards work
-10. **Start with One Agent** - Build and test one specialist before others
-11. **Test MCP + A2A Together** - Ensure both protocols work
-12. **Visualize Agent Flow** - UI helps understand collaboration
-
----
-
-## 🌟 What Each Version Demonstrates
-
-### V1 - CMS (Card Management System)
-**Showcases:**
-- Modern web application for Financial Services
-- Customer-facing card management
-- MuleSoft integration patterns (simulated)
-- Real-time operations
-- Professional banking UI
-
-**Good for demos about:**
-- Digital banking experiences
-- API-led connectivity
-- Customer engagement
-- Card lifecycle management
-
----
-
-### V1.5 - Admin Agent (Single Agent + MCP)
-**Showcases:**
-- Conversational AI for bank operations
-- MCP (Model Context Protocol) integration
-- Natural language admin interface
-- Tool-based agent architecture
-- LLM-powered operations
-
-**Good for demos about:**
-- AI agents in banking
-- Tool-augmented AI
-- Operational efficiency
-- Natural language interfaces
-- MCP standard adoption
-
----
-
-### V2 - Multi-Agent System (A2A Protocol)
-**Showcases:**
-- Agent-to-agent collaboration
-- Google A2A Protocol implementation
-- Specialized agent expertise
-- Multi-agent orchestration
-- Complex workflow automation
-- Both MCP + A2A working together
-
-**Good for demos about:**
-- Future of agentic AI
-- Multi-agent systems
-- Agent interoperability
-- A2A standard adoption
-- Scalable agent architectures
-- Enterprise AI orchestration
 
 ---
 
