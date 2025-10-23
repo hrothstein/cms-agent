@@ -114,7 +114,7 @@ app.listen(PORT, async () => {
             await a2aServer.start(A2A_PORT);
             console.log(`
 ✅ A2A Protocol Server started on port ${A2A_PORT}
-   Agent ID: ${agent_card_1.orchestratorAgentCard.id}
+   Agent: ${agent_card_1.orchestratorAgentCard.name}
    Agent Card: http://localhost:${A2A_PORT}/.well-known/agent-card.json
    Skills: ${agent_card_1.orchestratorAgentCard.skills.map((s) => s.name).join(', ')}
    

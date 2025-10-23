@@ -61,14 +61,14 @@ export class OrchestratorService {
         try {
           const card = await client.discoverAgent();
           
-          this.agents.set(card.id, {
-            agentId: card.id,
+          this.agents.set(card.name, {
+            agentId: card.name,
             agentName: card.name,
             client,
             card,
           });
 
-          console.log(`✅ Discovered agent: ${card.name} (${card.id})`);
+          console.log(`✅ Discovered agent: ${card.name} at ${card.url}`);
         } catch (error) {
           console.warn(`Failed to discover agent at ${registered.endpoint}:`, error);
         }
@@ -225,7 +225,7 @@ export class OrchestratorService {
       
       for (const skill of agent.card.skills) {
         formatted += `    - ${skill.name}: ${skill.description}\n`;
-        formatted += `      Parameters: ${Object.keys(skill.parameters).join(', ')}\n`;
+        formatted += `      Tags: ${skill.tags.join(', ')}\n`;
       }
       
       formatted += '\n';

@@ -8,161 +8,73 @@ import { AgentCard } from '../a2a-sdk/types/AgentCard';
 const ORCHESTRATOR_ENDPOINT = process.env.ORCHESTRATOR_ENDPOINT || 'http://localhost:3000';
 
 export const orchestratorAgentCard: AgentCard = {
-  protocol_version: '0.3.0',
-  id: 'cms-agent',
   name: 'CMS Agent',
-  description: 'Card Management System agent for managing customers and cards. Provides natural language interface and A2A protocol support.',
+  url: ORCHESTRATOR_ENDPOINT,
   version: '2.0.0',
-  capabilities: {
-    streaming: true,
-    push_notifications: false,
-    batch_operations: true
-  },
+  protocolVersion: '0.3.0',
+  description: 'Card Management System agent for managing customers and cards. Provides natural language interface and A2A protocol support.',
   skills: [
     {
-      id: 'manage_customer',
-      name: 'manage_customer',
-      description: 'Comprehensive customer management including create, read, update, delete operations',
-      parameters: {
-        operation: {
-          type: 'string',
-          required: true,
-          description: 'Operation to perform: get_all, get_by_id, create, update, delete'
-        },
-        customerId: {
-          type: 'string',
-          required: false,
-          description: 'Customer ID (required for get_by_id, update, delete)'
-        },
-        name: {
-          type: 'string',
-          required: false,
-          description: 'Customer name (for create/update)'
-        },
-        email: {
-          type: 'string',
-          required: false,
-          description: 'Customer email (for create/update)'
-        },
-        phone: {
-          type: 'string',
-          required: false,
-          description: 'Customer phone (for create/update)'
-        }
-      },
-      returns: {
-        success: { type: 'boolean' },
-        data: { type: 'object', description: 'Customer data or array of customers' },
-        message: { type: 'string' }
-      }
+      description: 'Get all customers or a specific customer by ID',
+      tags: ['get-customers', 'customer-management'],
+      name: 'Get Customers',
+      id: '1'
     },
     {
-      id: 'manage_card',
-      name: 'manage_card',
-      description: 'Comprehensive card management including create, read, update, delete operations',
-      parameters: {
-        operation: {
-          type: 'string',
-          required: true,
-          description: 'Operation to perform: get_all, get_by_id, create, update, delete'
-        },
-        cardId: {
-          type: 'string',
-          required: false,
-          description: 'Card ID (required for get_by_id, update, delete)'
-        },
-        customerId: {
-          type: 'string',
-          required: false,
-          description: 'Customer ID (for create)'
-        },
-        cardNumber: {
-          type: 'string',
-          required: false,
-          description: 'Card number (for create/update)'
-        },
-        cardType: {
-          type: 'string',
-          required: false,
-          description: 'Card type (for create/update)'
-        },
-        expiryDate: {
-          type: 'string',
-          required: false,
-          description: 'Expiry date (for create/update)'
-        }
-      },
-      returns: {
-        success: { type: 'boolean' },
-        data: { type: 'object', description: 'Card data or array of cards' },
-        message: { type: 'string' }
-      }
+      description: 'Create a new customer with name, email, and phone',
+      tags: ['create-customer', 'customer-management'],
+      name: 'Create Customer',
+      id: '2'
     },
     {
-      id: 'coordinate_agents',
-      name: 'coordinate_agents',
-      description: 'Coordinate multiple specialist agents to solve complex workflows',
-      parameters: {
-        workflow: {
-          type: 'string',
-          required: true,
-          description: 'Workflow type: fraud_investigation, compliance_check, customer_analysis'
-        },
-        parameters: {
-          type: 'object',
-          required: true,
-          description: 'Workflow-specific parameters'
-        }
-      },
-      returns: {
-        success: { type: 'boolean' },
-        results: { type: 'array', description: 'Results from coordinated agents' },
-        summary: { type: 'string' }
-      }
+      description: 'Update an existing customer by ID',
+      tags: ['update-customer', 'customer-management'],
+      name: 'Update Customer',
+      id: '3'
     },
     {
-      id: 'process_natural_language',
-      name: 'process_natural_language',
-      description: 'Process natural language queries and execute appropriate CMS operations',
-      parameters: {
-        message: {
-          type: 'string',
-          required: true,
-          description: 'Natural language query from user'
-        },
-        sessionId: {
-          type: 'string',
-          required: false,
-          description: 'Session ID for conversation context'
-        }
-      },
-      returns: {
-        success: { type: 'boolean' },
-        response: { type: 'string', description: 'Natural language response' },
-        toolsUsed: { type: 'array', description: 'Tools/agents used to fulfill request' }
-      }
+      description: 'Delete a customer by ID',
+      tags: ['delete-customer', 'customer-management'],
+      name: 'Delete Customer',
+      id: '4'
+    },
+    {
+      description: 'Get all cards or a specific card by ID',
+      tags: ['get-cards', 'card-management'],
+      name: 'Get Cards',
+      id: '5'
+    },
+    {
+      description: 'Create a new card for a customer',
+      tags: ['create-card', 'card-management'],
+      name: 'Create Card',
+      id: '6'
+    },
+    {
+      description: 'Update an existing card by ID',
+      tags: ['update-card', 'card-management'],
+      name: 'Update Card',
+      id: '7'
+    },
+    {
+      description: 'Delete a card by ID',
+      tags: ['delete-card', 'card-management'],
+      name: 'Delete Card',
+      id: '8'
     }
   ],
-  endpoints: {
-    task_submit: `${ORCHESTRATOR_ENDPOINT}/a2a/task/submit`,
-    task_status: `${ORCHESTRATOR_ENDPOINT}/a2a/task/{task_id}/status`,
-    task_stream: `${ORCHESTRATOR_ENDPOINT}/a2a/task/{task_id}/stream`
+  capabilities: {
+    streaming: true,
+    pushNotifications: false,
+    stateTransitionHistory: false,
+    extensions: []
   },
-  supported_protocols: ['JSON-RPC 2.0'],
-  security_schemes: {
-    bearer_auth: {
-      type: 'http',
-      scheme: 'bearer',
-      bearer_format: 'JWT'
-    }
+  provider: {
+    url: 'https://github.com/hrothstein/cms-agent',
+    organization: 'CMS'
   },
-  security: [],  // Empty array means authentication is optional
-  metadata: {
-    environment: process.env.NODE_ENV || 'development',
-    version: '2.0.0',
-    mcp_enabled: true,
-    a2a_enabled: true,
-    tags: ['cms', 'banking', 'cards', 'customers']
-  }
+  defaultInputModes: ['text/plain', 'application/json'],
+  defaultOutputModes: ['text/plain', 'application/json'],
+  supportsAuthenticatedExtendedCard: false
 };
 

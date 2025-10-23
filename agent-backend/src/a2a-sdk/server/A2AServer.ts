@@ -108,7 +108,7 @@ export class A2AServer {
 
     // Health check
     this.app.get('/health', (req, res) => {
-      res.json({ healthy: true, agent: this.agentCard.id });
+      res.json({ healthy: true, agent: this.agentCard.name });
     });
   }
 
@@ -176,7 +176,7 @@ export class A2AServer {
       skill,
       parameters,
       clientAgentId,
-      remoteAgentId: this.agentCard.id,
+      remoteAgentId: this.agentCard.name,
     });
 
     // Execute skill asynchronously
