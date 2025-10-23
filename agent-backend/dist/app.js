@@ -29,7 +29,12 @@ app.use((req, res, next) => {
 });
 // Routes
 app.use('/api/v1/chat', chat_routes_1.default);
-// A2A Agent Card endpoint
+// A2A Agent Card endpoints (0.3.0 and backward compatibility)
+// A2A 0.3.0 standard path
+app.get('/.well-known/agent-card.json', (req, res) => {
+    res.json(agent_card_1.orchestratorAgentCard);
+});
+// Legacy path for backward compatibility
 app.get('/.well-known/agent.json', (req, res) => {
     res.json(agent_card_1.orchestratorAgentCard);
 });
@@ -48,11 +53,11 @@ app.get('/', (req, res) => {
         version: '2.0.0',
         status: 'running',
         a2a_enabled: process.env.A2A_ENABLED === 'true',
-        agent_card: `${req.protocol}://${req.get('host')}/.well-known/agent.json`,
+        agent_card: `${req.protocol}://${req.get('host')}/.well-known/agent-card.json`,
         endpoints: {
             chat: '/api/v1/chat',
             health: '/health',
-            agent_card: '/.well-known/agent.json'
+            agent_card: '/.well-known/agent-card.json'
         }
     });
 });
@@ -90,7 +95,8 @@ app.listen(PORT, async () => {
 ║   - GET    /api/v1/chat/history/:sessionId          ║
 ║   - DELETE /api/v1/chat/history/:sessionId          ║
 ║   - GET    /api/v1/chat/capabilities                ║
-║   - GET    /.well-known/agent.json                  ║
+   ║   - GET    /.well-known/agent-card.json (A2A 0.3.0)║
+   ║   - GET    /.well-known/agent.json (legacy)       ║
 ║   - GET    /health                                   ║
 ║                                                       ║
 ║   📡 Capabilities:                                   ║
@@ -109,7 +115,7 @@ app.listen(PORT, async () => {
             console.log(`
 ✅ A2A Protocol Server started on port ${A2A_PORT}
    Agent ID: ${agent_card_1.orchestratorAgentCard.id}
-   Agent Card: http://localhost:${A2A_PORT}/.well-known/agent.json
+   Agent Card: http://localhost:${A2A_PORT}/.well-known/agent-card.json
    Skills: ${agent_card_1.orchestratorAgentCard.skills.map((s) => s.name).join(', ')}
    
    Other agents can now discover and delegate tasks to this orchestrator!
@@ -123,7 +129,7 @@ app.listen(PORT, async () => {
         console.log(`
 ℹ️  A2A Protocol Server is disabled
    Set A2A_ENABLED=true to enable agent-to-agent communication
-   Agent Card available at: http://localhost:${PORT}/.well-known/agent.json
+   Agent Card available at: http://localhost:${PORT}/.well-known/agent-card.json
     `);
     }
 });

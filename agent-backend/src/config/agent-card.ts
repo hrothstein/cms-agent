@@ -1,6 +1,6 @@
 /**
- * Orchestrator Agent Card
- * Published at /.well-known/agent.json for A2A discovery
+ * CMS Agent Card (A2A Protocol 0.3.0 Compatible)
+ * Published at /.well-known/agent-card.json for A2A discovery
  */
 
 import { AgentCard } from '../a2a-sdk/types/AgentCard';
@@ -8,18 +8,19 @@ import { AgentCard } from '../a2a-sdk/types/AgentCard';
 const ORCHESTRATOR_ENDPOINT = process.env.ORCHESTRATOR_ENDPOINT || 'http://localhost:3000';
 
 export const orchestratorAgentCard: AgentCard = {
+  protocol_version: '0.3.0',
   id: 'cms-agent',
   name: 'CMS Agent',
   description: 'Card Management System agent for managing customers and cards. Provides natural language interface and A2A protocol support.',
   version: '2.0.0',
-  capabilities: [
-    'customer_management',
-    'card_management',
-    'natural_language_processing',
-    'a2a_protocol'
-  ],
+  capabilities: {
+    streaming: true,
+    push_notifications: false,
+    batch_operations: true
+  },
   skills: [
     {
+      id: 'manage_customer',
       name: 'manage_customer',
       description: 'Comprehensive customer management including create, read, update, delete operations',
       parameters: {
@@ -56,6 +57,7 @@ export const orchestratorAgentCard: AgentCard = {
       }
     },
     {
+      id: 'manage_card',
       name: 'manage_card',
       description: 'Comprehensive card management including create, read, update, delete operations',
       parameters: {
@@ -97,6 +99,7 @@ export const orchestratorAgentCard: AgentCard = {
       }
     },
     {
+      id: 'coordinate_agents',
       name: 'coordinate_agents',
       description: 'Coordinate multiple specialist agents to solve complex workflows',
       parameters: {
@@ -118,6 +121,7 @@ export const orchestratorAgentCard: AgentCard = {
       }
     },
     {
+      id: 'process_natural_language',
       name: 'process_natural_language',
       description: 'Process natural language queries and execute appropriate CMS operations',
       parameters: {
@@ -145,15 +149,20 @@ export const orchestratorAgentCard: AgentCard = {
     task_stream: `${ORCHESTRATOR_ENDPOINT}/a2a/task/{task_id}/stream`
   },
   supported_protocols: ['JSON-RPC 2.0'],
-  authentication: {
-    type: 'Bearer',
-    required: false // Set to true in production
+  security_schemes: {
+    bearer_auth: {
+      type: 'http',
+      scheme: 'bearer',
+      bearer_format: 'JWT'
+    }
   },
+  security: [],  // Empty array means authentication is optional
   metadata: {
     environment: process.env.NODE_ENV || 'development',
     version: '2.0.0',
-    mcpEnabled: true,
-    a2aEnabled: true
+    mcp_enabled: true,
+    a2a_enabled: true,
+    tags: ['cms', 'banking', 'cards', 'customers']
   }
 };
 

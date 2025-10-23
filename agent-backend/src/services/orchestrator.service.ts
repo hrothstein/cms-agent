@@ -104,7 +104,7 @@ export class OrchestratorService {
     const matching: AgentDelegate[] = [];
 
     for (const agent of this.agents.values()) {
-      if (agent.card.capabilities && agent.card.capabilities.includes(capability)) {
+      if (agent.card.capabilities && Array.isArray(agent.card.capabilities) && agent.card.capabilities.includes(capability)) {
         matching.push(agent);
       }
     }
