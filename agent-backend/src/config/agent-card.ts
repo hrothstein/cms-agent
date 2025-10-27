@@ -5,7 +5,7 @@
 
 import { AgentCard } from '../a2a-sdk/types/AgentCard';
 
-const ORCHESTRATOR_ENDPOINT = process.env.ORCHESTRATOR_ENDPOINT || 'http://localhost:3000';
+const ORCHESTRATOR_ENDPOINT = process.env.ORCHESTRATOR_ENDPOINT || 'https://hbr-flextest-dl2x0l.8hm1bl.usa-e2.cloudhub.io/cmsagent';
 
 export const orchestratorAgentCard: AgentCard = {
   name: 'CMS Agent',
